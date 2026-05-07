@@ -1,0 +1,29 @@
+{
+  "co2Trend": [
+    { "year": 1960, "ppm": 317 },
+    { "year": 1970, "ppm": 326 },
+    { "year": 1980, "ppm": 339 },
+    { "year": 1990, "ppm": 354 },
+    { "year": 2000, "ppm": 370 },
+    { "year": 2010, "ppm": 390 },
+    { "year": 2020, "ppm": 414 },
+    { "year": 2025, "ppm": 422 }
+  ],
+  "captureGrowth": [
+    { "year": 2020, "Post-Combustion Capture": 38, "Direct Air Capture (DAC)": 1, "BECCS": 4, "Mineralization": 3 },
+    { "year": 2021, "Post-Combustion Capture": 42, "Direct Air Capture (DAC)": 2, "BECCS": 5, "Mineralization": 4 },
+    { "year": 2022, "Post-Combustion Capture": 47, "Direct Air Capture (DAC)": 3, "BECCS": 7, "Mineralization": 6 },
+    { "year": 2023, "Post-Combustion Capture": 54, "Direct Air Capture (DAC)": 5, "BECCS": 9, "Mineralization": 9 },
+    { "year": 2024, "Post-Combustion Capture": 63, "Direct Air Capture (DAC)": 8, "BECCS": 12, "Mineralization": 13 },
+    { "year": 2025, "Post-Combustion Capture": 74, "Direct Air Capture (DAC)": 13, "BECCS": 16, "Mineralization": 19 },
+    { "year": 2030, "Post-Combustion Capture": 138, "Direct Air Capture (DAC)": 39, "BECCS": 42, "Mineralization": 61 }
+  ],
+  "regionalAdoption": [
+    { "region": "North America", "post": 86, "pre": 58, "dac": 72, "beccs": 45, "ocean": 24, "mineral": 55 },
+    { "region": "Europe", "post": 73, "pre": 48, "dac": 64, "beccs": 58, "ocean": 31, "mineral": 49 },
+    { "region": "Asia Pacific", "post": 68, "pre": 63, "dac": 28, "beccs": 36, "ocean": 38, "mineral": 44 },
+    { "region": "Middle East", "post": 52, "pre": 70, "dac": 24, "beccs": 13, "ocean": 16, "mineral": 37 },
+    { "region": "Latin America", "post": 34, "pre": 24, "dac": 19, "beccs": 48, "ocean": 22, "mineral": 28 },
+    { "region": "Africa", "post": 22, "pre": 18, "dac": 15, "beccs": 26, "ocean": 17, "mineral": 23 }
+  ]
+}
