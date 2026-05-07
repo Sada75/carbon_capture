@@ -39,7 +39,7 @@ export default function Analysis() {
         <Reveal>
           <SectionHeader
             eyebrow="Analysis dashboard"
-            title="Compare real CCUS project data from the imported datasets."
+            title="Compare real CCUS project data."
             copy="The dashboard now uses the supplied IEA CCUS project databases, CCS map data, and CO2 sequestration facility data. Metrics are based on project counts, estimated Mt CO2/year capacity, project status, sector, region, and measured sequestered mass."
           />
         </Reveal>
