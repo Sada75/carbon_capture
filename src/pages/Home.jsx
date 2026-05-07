@@ -10,8 +10,8 @@ import CarbonTrendChart from '../charts/CarbonTrendChart';
 import { emissionSources, technologies } from '../data/technologies';
 
 const features = [
-  { icon: BarChart3, label: 'Interactive Dashboards', detail: 'Compare cost, efficiency, adoption, and capacity across technologies.' },
-  { icon: DatabaseZap, label: 'Comparative Analytics', detail: 'Weighted scoring ranks pathways using transparent assumptions.' },
+  { icon: BarChart3, label: 'Interactive Dashboards', detail: 'Compare project counts, status, regions, sectors, and estimated capacity.' },
+  { icon: DatabaseZap, label: 'Comparative Analytics', detail: 'Dataset-backed scoring ranks CCUS project types using transparent assumptions.' },
   { icon: Bot, label: 'AI Assistant', detail: 'Ask focused questions about carbon capture tradeoffs and futures.' },
   { icon: ShieldCheck, label: 'Case Study Ready', detail: 'Structured for real-world sites, references, and deployment examples.' },
 ];
@@ -47,10 +47,10 @@ export default function Home() {
             <div className="glass relative rounded-[8px] p-5">
               <div className="mb-5 flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-400">Atmospheric CO2</p>
-                  <strong className="font-display text-4xl text-white">422 ppm</strong>
+                  <p className="text-sm text-slate-400">CO2 sequestered</p>
+                  <strong className="font-display text-4xl text-white">7.95 Mt</strong>
                 </div>
-                <span className="rounded-full bg-climate-mint/15 px-3 py-1 text-sm text-climate-mint">2025 index</span>
+                <span className="rounded-full bg-climate-mint/15 px-3 py-1 text-sm text-climate-mint">2022 reported</span>
               </div>
               <div className="h-[280px]">
                 <CarbonTrendChart />

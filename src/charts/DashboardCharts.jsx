@@ -21,8 +21,7 @@ import {
   YAxis,
   ZAxis,
 } from 'recharts';
-import { captureGrowth, marketShare, radarData, regionalAdoption } from '../data/chartData';
-import { technologies } from '../data/technologies';
+import { captureGrowth, marketShare, radarData, regionalAdoption, regionalKeys } from '../data/chartData';
 
 const tooltipStyle = {
   background: '#07111f',
@@ -38,10 +37,10 @@ export function CostBarChart({ data }) {
         <CartesianGrid stroke="rgba(255,255,255,.08)" vertical={false} />
         <XAxis dataKey="name" stroke="#94a3b8" tickLine={false} axisLine={false} interval={0} angle={-24} textAnchor="end" height={70} tick={{ fontSize: 11 }} />
         <YAxis stroke="#94a3b8" tickLine={false} axisLine={false} />
-        <Tooltip contentStyle={tooltipStyle} formatter={(value) => [`$${value}/t`, 'Cost']} />
-        <Bar dataKey="cost" radius={[8, 8, 0, 0]} animationDuration={1200}>
-          {data.map((entry) => (
-            <Cell key={entry.id} fill={technologies.find((tech) => tech.id === entry.id)?.color ?? '#34d5ff'} />
+        <Tooltip contentStyle={tooltipStyle} formatter={(value) => [`${value} Mt CO2/yr`, 'Estimated capacity']} />
+        <Bar dataKey="capacity" radius={[8, 8, 0, 0]} animationDuration={1200}>
+          {data.map((entry, index) => (
+            <Cell key={entry.id} fill={marketShare[index % marketShare.length]?.color ?? '#34d5ff'} />
           ))}
         </Bar>
       </BarChart>
@@ -54,13 +53,13 @@ export function EfficiencyCostScatter({ data }) {
     <ResponsiveContainer width="100%" height="100%">
       <ScatterChart margin={{ top: 14, right: 18, left: -10, bottom: 12 }}>
         <CartesianGrid stroke="rgba(255,255,255,.08)" />
-        <XAxis type="number" dataKey="cost" name="Cost" unit="/t" stroke="#94a3b8" tickLine={false} axisLine={false} />
-        <YAxis type="number" dataKey="efficiency" name="Efficiency" unit="%" stroke="#94a3b8" tickLine={false} axisLine={false} />
+        <XAxis type="number" dataKey="projectCount" name="Projects" stroke="#94a3b8" tickLine={false} axisLine={false} />
+        <YAxis type="number" dataKey="capacity" name="Capacity" unit=" Mt/yr" stroke="#94a3b8" tickLine={false} axisLine={false} />
         <ZAxis type="number" dataKey="capacity" range={[100, 580]} />
         <Tooltip contentStyle={tooltipStyle} cursor={{ strokeDasharray: '3 3' }} />
         <Scatter data={data} fill="#5dffc7">
-          {data.map((entry) => (
-            <Cell key={entry.id} fill={technologies.find((tech) => tech.id === entry.id)?.color ?? '#5dffc7'} />
+          {data.map((entry, index) => (
+            <Cell key={entry.id} fill={marketShare[index % marketShare.length]?.color ?? '#5dffc7'} />
           ))}
         </Scatter>
       </ScatterChart>
@@ -75,8 +74,9 @@ export function MultiMetricRadar() {
         <PolarGrid stroke="rgba(255,255,255,.12)" />
         <PolarAngleAxis dataKey="subject" tick={{ fill: '#cbd5e1', fontSize: 11 }} />
         <PolarRadiusAxis angle={90} domain={[0, 100]} tick={false} axisLine={false} />
-        <Radar name="Efficiency" dataKey="efficiency" stroke="#34d5ff" fill="#34d5ff" fillOpacity={0.16} />
-        <Radar name="Capacity" dataKey="capacity" stroke="#5dffc7" fill="#5dffc7" fillOpacity={0.12} />
+        <Radar name="Capacity share" dataKey="capacityShare" stroke="#34d5ff" fill="#34d5ff" fillOpacity={0.16} />
+        <Radar name="Operational share" dataKey="operationalShare" stroke="#5dffc7" fill="#5dffc7" fillOpacity={0.12} />
+        <Radar name="Project share" dataKey="projectShare" stroke="#d5ff6a" fill="#d5ff6a" fillOpacity={0.1} />
         <Tooltip contentStyle={tooltipStyle} />
       </RadarChart>
     </ResponsiveContainer>
@@ -91,10 +91,8 @@ export function CaptureGrowthLine() {
         <XAxis dataKey="year" stroke="#94a3b8" tickLine={false} axisLine={false} />
         <YAxis stroke="#94a3b8" tickLine={false} axisLine={false} />
         <Tooltip contentStyle={tooltipStyle} />
-        <Line type="monotone" dataKey="Post-Combustion Capture" stroke="#34d5ff" strokeWidth={3} dot={false} />
-        <Line type="monotone" dataKey="Direct Air Capture (DAC)" stroke="#5dffc7" strokeWidth={3} dot={false} />
-        <Line type="monotone" dataKey="BECCS" stroke="#47d16c" strokeWidth={3} dot={false} />
-        <Line type="monotone" dataKey="Mineralization" stroke="#d5ff6a" strokeWidth={3} dot={false} />
+        <Line type="monotone" dataKey="capacity" name="Cumulative capacity" stroke="#34d5ff" strokeWidth={3} dot={false} />
+        <Line type="monotone" dataKey="added" name="Added capacity" stroke="#5dffc7" strokeWidth={2} dot={false} />
       </LineChart>
     </ResponsiveContainer>
   );
@@ -138,21 +136,14 @@ export function MiniMetricChart({ tech }) {
 }
 
 export function Heatmap() {
-  const keys = [
-    ['post', 'Post'],
-    ['pre', 'Pre'],
-    ['dac', 'DAC'],
-    ['beccs', 'BECCS'],
-    ['ocean', 'Ocean'],
-    ['mineral', 'Mineral'],
-  ];
+  const keys = regionalKeys.slice(0, 6).map(({ key, label }) => [key, label]);
 
   return (
     <div className="grid h-full grid-rows-[auto_1fr] gap-3">
       <div className="grid grid-cols-[120px_repeat(6,minmax(54px,1fr))] gap-2 text-xs text-slate-400">
         <span />
         {keys.map(([, label]) => (
-          <span key={label} className="text-center">{label}</span>
+          <span key={label} className="text-center">{label.replace('Full chain', 'Full').replace('Transport', 'Trans.')}</span>
         ))}
       </div>
       <div className="grid gap-2">
@@ -164,7 +155,7 @@ export function Heatmap() {
                 key={key}
                 className="grid min-h-9 place-items-center rounded-[8px] text-xs font-semibold text-white"
                 style={{
-                  background: `linear-gradient(135deg, rgba(52,213,255,${row[key] / 120}), rgba(93,255,199,${row[key] / 130}))`,
+                  background: `linear-gradient(135deg, rgba(52,213,255,${Math.min(row[key] / 240, 0.85)}), rgba(93,255,199,${Math.min(row[key] / 260, 0.75)}))`,
                   border: '1px solid rgba(255,255,255,.1)',
                 }}
               >

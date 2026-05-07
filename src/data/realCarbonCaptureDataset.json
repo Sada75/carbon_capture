@@ -1,0 +1,466 @@
+{
+  "sources": [
+    "IEA CCUS Projects Database 2026.xlsx",
+    "IEA_CCUS_Projects_Database_2024.csv",
+    "CCS Map Data Jan2023 (1) - Map Data.csv",
+    "CO2 Sequestered 2016-2022.csv"
+  ],
+  "summary": {
+    "iea2026Projects": 1110,
+    "iea2024Projects": 816,
+    "mapProjects": 417,
+    "sequestrationFacilities": 13,
+    "estimatedCapacityMtPerYear": 2464.43
+  },
+  "technologyMetrics": [
+    {
+      "id": "capture",
+      "name": "Capture",
+      "projectCount": 458,
+      "capacity": 412.81,
+      "adoption": 16.8,
+      "operationalShare": 3,
+      "score": 459.2
+    },
+    {
+      "id": "full-chain",
+      "name": "Full chain",
+      "projectCount": 215,
+      "capacity": 213.39,
+      "adoption": 8.7,
+      "operationalShare": 24,
+      "score": 239.7
+    },
+    {
+      "id": "storage",
+      "name": "Storage",
+      "projectCount": 166,
+      "capacity": 410.89,
+      "adoption": 16.7,
+      "operationalShare": 2,
+      "score": 427.9
+    },
+    {
+      "id": "t-s",
+      "name": "T&S",
+      "projectCount": 119,
+      "capacity": 537.14,
+      "adoption": 21.8,
+      "operationalShare": 2,
+      "score": 549.4
+    },
+    {
+      "id": "transport",
+      "name": "Transport",
+      "projectCount": 80,
+      "capacity": 870.2,
+      "adoption": 35.3,
+      "operationalShare": 4,
+      "score": 879.0
+    },
+    {
+      "id": "ccu",
+      "name": "CCU",
+      "projectCount": 72,
+      "capacity": 20.0,
+      "adoption": 0.8,
+      "operationalShare": 14,
+      "score": 30.0
+    }
+  ],
+  "sequesteredTrend": [
+    {
+      "year": 2016,
+      "mt": 3.09
+    },
+    {
+      "year": 2017,
+      "mt": 5.96
+    },
+    {
+      "year": 2018,
+      "mt": 7.66
+    },
+    {
+      "year": 2019,
+      "mt": 8.33
+    },
+    {
+      "year": 2020,
+      "mt": 6.8
+    },
+    {
+      "year": 2021,
+      "mt": 6.95
+    },
+    {
+      "year": 2022,
+      "mt": 7.95
+    }
+  ],
+  "capacityGrowth": [
+    {
+      "year": 2010,
+      "capacity": 7.82,
+      "added": 7.82
+    },
+    {
+      "year": 2011,
+      "capacity": 8.15,
+      "added": 0.33
+    },
+    {
+      "year": 2012,
+      "capacity": 8.31,
+      "added": 0.16
+    },
+    {
+      "year": 2013,
+      "capacity": 25.51,
+      "added": 17.2
+    },
+    {
+      "year": 2014,
+      "capacity": 26.51,
+      "added": 1.0
+    },
+    {
+      "year": 2015,
+      "capacity": 28.41,
+      "added": 1.9
+    },
+    {
+      "year": 2016,
+      "capacity": 30.61,
+      "added": 2.2
+    },
+    {
+      "year": 2017,
+      "capacity": 34.51,
+      "added": 3.9
+    },
+    {
+      "year": 2018,
+      "capacity": 35.11,
+      "added": 0.6
+    },
+    {
+      "year": 2019,
+      "capacity": 38.91,
+      "added": 3.8
+    },
+    {
+      "year": 2020,
+      "capacity": 61.29,
+      "added": 22.38
+    },
+    {
+      "year": 2021,
+      "capacity": 61.64,
+      "added": 0.35
+    },
+    {
+      "year": 2022,
+      "capacity": 63.25,
+      "added": 1.6
+    },
+    {
+      "year": 2023,
+      "capacity": 65.07,
+      "added": 1.83
+    },
+    {
+      "year": 2024,
+      "capacity": 68.25,
+      "added": 3.18
+    },
+    {
+      "year": 2025,
+      "capacity": 115.03,
+      "added": 46.77
+    },
+    {
+      "year": 2026,
+      "capacity": 215.55,
+      "added": 100.52
+    },
+    {
+      "year": 2027,
+      "capacity": 388.85,
+      "added": 173.3
+    },
+    {
+      "year": 2028,
+      "capacity": 699.57,
+      "added": 310.73
+    },
+    {
+      "year": 2029,
+      "capacity": 845.79,
+      "added": 146.21
+    },
+    {
+      "year": 2030,
+      "capacity": 1290.65,
+      "added": 444.86
+    },
+    {
+      "year": 2031,
+      "capacity": 1316.65,
+      "added": 25.99
+    },
+    {
+      "year": 2032,
+      "capacity": 1420.94,
+      "added": 104.29
+    },
+    {
+      "year": 2033,
+      "capacity": 1450.64,
+      "added": 29.7
+    },
+    {
+      "year": 2034,
+      "capacity": 1462.42,
+      "added": 11.78
+    },
+    {
+      "year": 2035,
+      "capacity": 1580.61,
+      "added": 118.19
+    }
+  ],
+  "regionalAdoption": [
+    {
+      "region": "North America",
+      "capture": 204.54,
+      "full-chain": 108.67,
+      "storage": 209.59,
+      "t-s": 220.32,
+      "transport": 435.4,
+      "ccu": 3.97
+    },
+    {
+      "region": "Europe",
+      "capture": 166.1,
+      "full-chain": 24.29,
+      "storage": 177.2,
+      "t-s": 206.21,
+      "transport": 432.3,
+      "ccu": 12.43
+    },
+    {
+      "region": "Australia and New Zealand",
+      "capture": 8.6,
+      "full-chain": 4.42,
+      "storage": 18.0,
+      "t-s": 56.42,
+      "transport": 0.0,
+      "ccu": 0.5
+    },
+    {
+      "region": "Other Asia Pacific",
+      "capture": 6.51,
+      "full-chain": 41.81,
+      "storage": 1.1,
+      "t-s": 30.2,
+      "transport": 0.0,
+      "ccu": 2.72
+    },
+    {
+      "region": "Middle East",
+      "capture": 12.9,
+      "full-chain": 16.48,
+      "storage": 5.0,
+      "t-s": 9.0,
+      "transport": 0,
+      "ccu": 0
+    },
+    {
+      "region": "Central and South America",
+      "capture": 0.01,
+      "full-chain": 14.62,
+      "storage": 0.0,
+      "t-s": 0,
+      "transport": 0,
+      "ccu": 0.38
+    },
+    {
+      "region": "Japan and Other Asia Pacific",
+      "capture": 0.0,
+      "full-chain": 0,
+      "storage": 0,
+      "t-s": 15.0,
+      "transport": 0,
+      "ccu": 0
+    }
+  ],
+  "regionalKeys": [
+    {
+      "key": "capture",
+      "label": "Capture"
+    },
+    {
+      "key": "full-chain",
+      "label": "Full chain"
+    },
+    {
+      "key": "storage",
+      "label": "Storage"
+    },
+    {
+      "key": "t-s",
+      "label": "T&S"
+    },
+    {
+      "key": "transport",
+      "label": "Transport"
+    },
+    {
+      "key": "ccu",
+      "label": "CCU"
+    }
+  ],
+  "marketShare": [
+    {
+      "name": "Capture",
+      "value": 16.8
+    },
+    {
+      "name": "Full chain",
+      "value": 8.7
+    },
+    {
+      "name": "Storage",
+      "value": 16.7
+    },
+    {
+      "name": "T&S",
+      "value": 21.8
+    },
+    {
+      "name": "Transport",
+      "value": 35.3
+    },
+    {
+      "name": "CCU",
+      "value": 0.8
+    }
+  ],
+  "statusCounts": [
+    {
+      "name": "Planned",
+      "value": 877
+    },
+    {
+      "name": "Operational",
+      "value": 86
+    },
+    {
+      "name": "Cancelled",
+      "value": 77
+    },
+    {
+      "name": "Under construction",
+      "value": 66
+    },
+    {
+      "name": "Decommissioned",
+      "value": 3
+    },
+    {
+      "name": "Suspended",
+      "value": 1
+    }
+  ],
+  "sectorCapacity": [
+    {
+      "name": "CO2 T&S",
+      "capacity": 1818.23
+    },
+    {
+      "name": "Fuel transformation",
+      "capacity": 310.05
+    },
+    {
+      "name": "Power and heat",
+      "capacity": 203.54
+    },
+    {
+      "name": "Industry",
+      "capacity": 110.34
+    },
+    {
+      "name": "DAC",
+      "capacity": 21.07
+    },
+    {
+      "name": "TBD",
+      "capacity": 1.2
+    }
+  ],
+  "mapStatus": [
+    {
+      "name": "Planning",
+      "value": 89
+    },
+    {
+      "name": "Unknown",
+      "value": 71
+    },
+    {
+      "name": "Operational",
+      "value": 48
+    },
+    {
+      "name": "Engineering design",
+      "value": 32
+    },
+    {
+      "name": "Plant Design",
+      "value": 29
+    },
+    {
+      "name": "Developing Infrastructure",
+      "value": 21
+    },
+    {
+      "name": "Injection Complete",
+      "value": 20
+    },
+    {
+      "name": "Injection Ongoing",
+      "value": 20
+    }
+  ],
+  "mapContinents": [
+    {
+      "name": "North America",
+      "value": 204
+    },
+    {
+      "name": "Europe",
+      "value": 117
+    },
+    {
+      "name": "Asia",
+      "value": 50
+    },
+    {
+      "name": "Australia",
+      "value": 32
+    },
+    {
+      "name": "Unknown",
+      "value": 7
+    },
+    {
+      "name": "Africa",
+      "value": 4
+    },
+    {
+      "name": "South America",
+      "value": 3
+    }
+  ]
+}

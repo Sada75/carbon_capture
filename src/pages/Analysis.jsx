@@ -12,10 +12,10 @@ import {
   Heatmap,
   MultiMetricRadar,
 } from '../charts/DashboardCharts';
-import { technologyMetrics } from '../data/chartData';
+import { summary, technologyMetrics } from '../data/chartData';
 
-const regions = ['Global', 'North America', 'Europe', 'Asia Pacific', 'Middle East', 'Latin America', 'Africa'];
-const years = ['2025', '2030', '2040', '2050'];
+const regions = ['Global', 'North America', 'Europe', 'Middle East', 'China', 'Other Asia Pacific'];
+const years = ['2024', '2026', '2030', '2035'];
 
 export default function Analysis() {
   const [technology, setTechnology] = useState('all');
@@ -28,10 +28,10 @@ export default function Analysis() {
   }, [technology]);
 
   const ranked = useMemo(() => [...technologyMetrics].sort((a, b) => b.score - a.score), []);
-  const mostEfficient = [...technologyMetrics].sort((a, b) => b.efficiency - a.efficiency)[0];
-  const lowestCost = [...technologyMetrics].sort((a, b) => a.cost - b.cost)[0];
+  const largestPortfolio = [...technologyMetrics].sort((a, b) => b.projectCount - a.projectCount)[0];
+  const mostOperational = [...technologyMetrics].sort((a, b) => b.operationalShare - a.operationalShare)[0];
   const highestCapacity = [...technologyMetrics].sort((a, b) => b.capacity - a.capacity)[0];
-  const avgAdoption = Math.round(technologyMetrics.reduce((sum, item) => sum + item.adoption, 0) / technologyMetrics.length);
+  const totalProjects = summary.iea2026Projects;
 
   return (
     <div className="pb-24 pt-32">
@@ -39,15 +39,15 @@ export default function Analysis() {
         <Reveal>
           <SectionHeader
             eyebrow="Analysis dashboard"
-            title="Compare carbon capture pathways with transparent metrics."
-            copy="The dashboard uses a local sample dataset to compare efficiency, estimated cost, capacity, adoption, and regional intensity. The scoring formula is visible by design: Score = 0.4 * Efficiency - 0.3 * Cost + 0.3 * Capacity."
+            title="Compare real CCUS project data from the imported datasets."
+            copy="The dashboard now uses the supplied IEA CCUS project databases, CCS map data, and CO2 sequestration facility data. Metrics are based on project counts, estimated Mt CO2/year capacity, project status, sector, region, and measured sequestered mass."
           />
         </Reveal>
         <div className="mt-10 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <MetricCard icon={Award} label="Most Efficient Technology" value={mostEfficient.name} detail={`${mostEfficient.efficiency}% capture efficiency`} />
-          <MetricCard icon={Gauge} label="Lowest Cost Technology" value={lowestCost.name} detail={`$${lowestCost.cost}/t estimated cost`} accent="#34d5ff" />
-          <MetricCard icon={TrendingUp} label="Highest CO2 Removal Capacity" value={highestCapacity.name} detail={`${highestCapacity.capacity}/100 capacity index`} accent="#d5ff6a" />
-          <MetricCard icon={Globe2} label="Average Global Adoption" value={`${avgAdoption}%`} detail={`${region}, ${year} planning view`} accent="#47d16c" />
+          <MetricCard icon={Award} label="Largest Project Portfolio" value={largestPortfolio.name} detail={`${largestPortfolio.projectCount} projects in IEA 2026`} />
+          <MetricCard icon={Gauge} label="Highest Operational Share" value={mostOperational.name} detail={`${mostOperational.operationalShare}% of projects operational`} accent="#34d5ff" />
+          <MetricCard icon={TrendingUp} label="Highest Estimated Capacity" value={highestCapacity.name} detail={`${highestCapacity.capacity} Mt CO2/year`} accent="#d5ff6a" />
+          <MetricCard icon={Globe2} label="Total Projects Loaded" value={totalProjects.toLocaleString()} detail={`${summary.estimatedCapacityMtPerYear} Mt CO2/year estimated capacity`} accent="#47d16c" />
         </div>
       </section>
 
@@ -76,22 +76,22 @@ export default function Analysis() {
       </section>
 
       <section className="section-shell mt-8 grid gap-5 xl:grid-cols-2">
-        <ChartCard title="Cost Comparison" subtitle="Estimated cost per tonne of CO2">
+        <ChartCard title="Estimated Capacity" subtitle="IEA 2026 estimated capacity by project type, Mt CO2/year">
           <CostBarChart data={filtered} />
         </ChartCard>
-        <ChartCard title="Efficiency vs Cost" subtitle="Bubble size indicates removal capacity">
+        <ChartCard title="Projects vs Capacity" subtitle="Project count compared with estimated capacity">
           <EfficiencyCostScatter data={filtered} />
         </ChartCard>
-        <ChartCard title="Multi-metric Comparison" subtitle="Efficiency and capacity across the portfolio">
+        <ChartCard title="Project Type Comparison" subtitle="Capacity share, operational share, and project share">
           <MultiMetricRadar />
         </ChartCard>
-        <ChartCard title="CO2 Capture Growth" subtitle="Illustrative deployment trajectory in MtCO2/year">
+        <ChartCard title="IEA Capacity Timeline" subtitle="Cumulative and newly added capacity by operation year">
           <CaptureGrowthLine />
         </ChartCard>
-        <ChartCard title="Global Market Share / Adoption" subtitle="Relative adoption index">
+        <ChartCard title="Capacity Share" subtitle="Share of estimated capacity by project type">
           <AdoptionPie />
         </ChartCard>
-        <ChartCard title="Regional Adoption Heatmap" subtitle="Intensity index by region and technology">
+        <ChartCard title="Regional Capacity Heatmap" subtitle="Mt CO2/year by region and project type">
           <Heatmap />
         </ChartCard>
       </section>
@@ -99,8 +99,8 @@ export default function Analysis() {
       <section className="section-shell mt-8">
         <div className="glass overflow-hidden rounded-[8px]">
           <div className="border-b border-white/10 p-5">
-            <h3 className="font-display text-2xl text-white">Weighted Ranking Table</h3>
-            <p className="mt-2 text-sm text-slate-400">Score = 0.4 * Efficiency - 0.3 * Cost + 0.3 * Capacity</p>
+            <h3 className="font-display text-2xl text-white">Project Type Ranking Table</h3>
+            <p className="mt-2 text-sm text-slate-400">Score combines estimated capacity, project count, and operational share from the imported datasets.</p>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] text-left text-sm">
@@ -108,10 +108,10 @@ export default function Analysis() {
                 <tr>
                   <th className="px-5 py-4">Rank</th>
                   <th className="px-5 py-4">Technology</th>
-                  <th className="px-5 py-4">Efficiency</th>
-                  <th className="px-5 py-4">Cost</th>
+                  <th className="px-5 py-4">Projects</th>
                   <th className="px-5 py-4">Capacity</th>
-                  <th className="px-5 py-4">Adoption</th>
+                  <th className="px-5 py-4">Capacity Share</th>
+                  <th className="px-5 py-4">Operational</th>
                   <th className="px-5 py-4">Score</th>
                 </tr>
               </thead>
@@ -120,10 +120,10 @@ export default function Analysis() {
                   <tr key={item.id} className="border-t border-white/10 text-slate-200">
                     <td className="px-5 py-4 font-semibold text-climate-mint">#{index + 1}</td>
                     <td className="px-5 py-4 text-white">{item.name}</td>
-                    <td className="px-5 py-4">{item.efficiency}%</td>
-                    <td className="px-5 py-4">${item.cost}/t</td>
-                    <td className="px-5 py-4">{item.capacity}</td>
+                    <td className="px-5 py-4">{item.projectCount}</td>
+                    <td className="px-5 py-4">{item.capacity} Mt/yr</td>
                     <td className="px-5 py-4">{item.adoption}%</td>
+                    <td className="px-5 py-4">{item.operationalShare}%</td>
                     <td className="px-5 py-4 font-display text-lg text-white">{item.score}</td>
                   </tr>
                 ))}

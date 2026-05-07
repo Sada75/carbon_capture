@@ -18,7 +18,7 @@ export default function CarbonTrendChart() {
           contentStyle={{ background: '#07111f', border: '1px solid rgba(255,255,255,.14)', borderRadius: 8 }}
           labelStyle={{ color: '#fff' }}
         />
-        <Area type="monotone" dataKey="ppm" stroke="#5dffc7" strokeWidth={3} fill="url(#co2)" animationDuration={1300} />
+        <Area type="monotone" dataKey="mt" name="Mt CO2 sequestered" stroke="#5dffc7" strokeWidth={3} fill="url(#co2)" animationDuration={1300} />
       </AreaChart>
     </ResponsiveContainer>
   );

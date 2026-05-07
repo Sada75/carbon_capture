@@ -21,7 +21,7 @@ export default function About() {
       <section className="section-shell mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <MetricCard icon={Leaf} label="Purpose" value="Climate literacy" detail="Make CCS, DAC, BECCS, mineralization, and ocean removal easier to compare." />
         <MetricCard icon={Globe2} label="Impact" value="Systems view" detail="Connect emissions, infrastructure, cost, energy, and storage durability." accent="#34d5ff" />
-        <MetricCard icon={Database} label="Data Sources" value="Public references" detail="IEA, IPCC, research papers, project reports, and sample local datasets." accent="#d5ff6a" />
+        <MetricCard icon={Database} label="Data Sources" value="Imported datasets" detail="IEA CCUS project databases, CCS map data, and reported CO2 sequestration facility data." accent="#d5ff6a" />
         <MetricCard icon={Code2} label="Tech Stack" value="React + Vite" detail="Tailwind CSS, Framer Motion, Recharts, React Router, Lucide icons." accent="#47d16c" />
       </section>
 
@@ -38,10 +38,10 @@ export default function About() {
           <div className="glass rounded-[8px] p-6">
             <h2 className="font-display text-3xl text-white">Credits and references</h2>
             <div className="mt-5 grid gap-3 text-sm text-slate-300">
-              <p>- International Energy Agency carbon capture reports</p>
-              <p>- IPCC mitigation assessment literature</p>
-              <p>- Peer-reviewed carbon removal and storage research</p>
-              <p>- Public project announcements and sample educational data</p>
+              <p>- IEA CCUS Projects Database 2026 workbook</p>
+              <p>- IEA CCUS Projects Database 2024 CSV</p>
+              <p>- CCS Map Data Jan 2023 project map CSV</p>
+              <p>- CO2 Sequestered 2016-2022 facility CSV</p>
             </div>
           </div>
         </Reveal>

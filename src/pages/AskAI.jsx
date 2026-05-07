@@ -5,13 +5,13 @@ import ReactMarkdown from 'react-markdown';
 import Button from '../components/Button';
 import Reveal from '../components/Reveal';
 import SectionHeader from '../components/SectionHeader';
-import { sendChatMessage } from '../services/chatService';
+import { chatConfig, sendChatMessage } from '../services/chatService';
 
 const prompts = [
-  'What is Direct Air Capture?',
-  'Which technology is most cost effective?',
-  'Why is DAC expensive?',
-  'What is the future of carbon capture?',
+  'Summarize the datasets used in this dashboard.',
+  'Which project type has the highest estimated capacity?',
+  'How much CO2 was sequestered from 2016 to 2022?',
+  'Compare planned and operational CCUS projects.',
 ];
 
 export default function AskAI() {
@@ -20,7 +20,7 @@ export default function AskAI() {
       id: 'welcome',
       role: 'assistant',
       content:
-        'Hi. I can help explain carbon capture technologies, compare approaches, and translate dashboard metrics into plain language.',
+        'Hi. I can answer questions about the imported CCUS datasets, explain the dashboard metrics, and keep track of our conversation as we go.',
     },
   ]);
   const [input, setInput] = useState('');
@@ -44,9 +44,22 @@ export default function AskAI() {
     setMessages((items) => [...items, userMessage]);
     setInput('');
     setLoading(true);
-    const response = await sendChatMessage(trimmed);
-    setMessages((items) => [...items, response]);
-    setLoading(false);
+    try {
+      const response = await sendChatMessage([...messages, userMessage]);
+      setMessages((items) => [...items, response]);
+    } catch (error) {
+      setMessages((items) => [
+        ...items,
+        {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: `I could not reach the OpenAI API. Check the API key, network access, and browser console details.\n\n\`${error.message}\``,
+          createdAt: new Date().toISOString(),
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -55,8 +68,8 @@ export default function AskAI() {
         <Reveal>
           <SectionHeader
             eyebrow="Ask AI"
-            title="A focused assistant for carbon capture questions."
-            copy="The interface is frontend-ready with a separated chat service. Today it uses mock responses, and the service can be connected to a real API without changing the chat UI."
+            title="A conversational assistant for the carbon capture datasets."
+            copy="The chatbot sends recent conversation history plus a compressed summary of the imported IEA, CCS map, and sequestration datasets to the OpenAI API. Replace the placeholder API key in the chat service when you are ready."
           />
           <div className="mt-8 grid gap-3">
             {prompts.map((prompt) => (
@@ -79,9 +92,16 @@ export default function AskAI() {
               </span>
               <div>
                 <h2 className="font-display text-xl text-white">Carbon Intelligence Assistant</h2>
-                <p className="text-sm text-slate-400">Mock API mode</p>
+                <p className="text-sm text-slate-400">
+                  {chatConfig.hasApiKey ? `OpenAI API mode - ${chatConfig.model}` : 'OpenAI API placeholder mode'}
+                </p>
               </div>
             </div>
+            {!chatConfig.hasApiKey ? (
+              <div className="border-b border-climate-mint/20 bg-climate-mint/10 px-5 py-3 text-sm text-climate-mint">
+                Replace <code>PASTE_YOUR_OPENAI_API_KEY_HERE</code> in <code>src/services/chatService.js</code> to enable live replies.
+              </div>
+            ) : null}
             <div className="flex-1 space-y-5 overflow-y-auto p-5">
               {messages.map((message) => {
                 const isUser = message.role === 'user';

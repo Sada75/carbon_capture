@@ -1,43 +1,97 @@
-const knowledgeBase = [
-  {
-    keywords: ['direct air capture', 'dac'],
-    response:
-      '**Direct Air Capture (DAC)** removes CO2 from ambient air using chemical sorbents or solvents. It is powerful because it can address legacy emissions, but expensive because air contains only about 0.04% CO2, so systems must move and process huge air volumes.',
-  },
-  {
-    keywords: ['cost effective', 'lowest cost', 'cheap', 'affordable'],
-    response:
-      'For near-term deployment, **post-combustion capture** and **mineralization** often look more cost-effective than DAC because they work with concentrated streams or stable mineral reactions. The dashboard scores affordability, efficiency, and capacity together so you can compare tradeoffs.',
-  },
-  {
-    keywords: ['future', 'potential', '2030', 'scale'],
-    response:
-      'The future is likely a portfolio: point-source capture for heavy industry, DAC for durable removals, BECCS where biomass is sustainable, and mineralization for long-lived storage. The winners will be technologies that combine low-carbon energy, credible measurement, and permanent storage.',
-  },
-  {
-    keywords: ['why', 'expensive', 'dac'],
-    response:
-      'DAC is expensive because atmospheric CO2 is dilute, fans and contactors consume energy, sorbents need regeneration, and projects still lack manufacturing scale. Costs can fall with better materials, cheaper clean heat, modular production, and larger deployment.',
-  },
-  {
-    keywords: ['beccs', 'bioenergy'],
-    response:
-      '**BECCS** means bioenergy with carbon capture and storage. Biomass absorbs CO2 while growing, then capture systems store the CO2 released during energy or fuel production. Its climate value depends heavily on sustainable feedstocks and land-use safeguards.',
-  },
-];
+import dataset from '../data/realCarbonCaptureDataset.json';
 
-const fallback =
-  'Carbon capture is a family of technologies, not a single machine. Ask me about DAC, BECCS, mineralization, costs, efficiency, adoption, or which pathway fits a specific industry.';
+const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const OPENAI_MODEL = 'gpt-4o-mini';
+const OPENAI_ENDPOINT = 'https://api.openai.com/v1/chat/completions';
 
-export async function sendChatMessage(message) {
-  await new Promise((resolve) => setTimeout(resolve, 850));
-  const normalized = message.toLowerCase();
-  const match = knowledgeBase.find((item) => item.keywords.some((keyword) => normalized.includes(keyword)));
+const isPlaceholderKey = !OPENAI_API_KEY || OPENAI_API_KEY === 'PASTE_YOUR_OPENAI_API_KEY_HERE';
+
+function list(items, formatter) {
+  return items.map(formatter).join('; ');
+}
+
+const compressedDatasetContext = `
+You are the Carbon Intelligence Assistant for a carbon capture analytics dashboard.
+Use this compressed dataset context as the primary source for dashboard-specific answers.
+
+Sources loaded: ${dataset.sources.join(', ')}.
+Dataset scale: ${dataset.summary.iea2026Projects} IEA 2026 projects, ${dataset.summary.iea2024Projects} IEA 2024 projects, ${dataset.summary.mapProjects} CCS map projects, ${dataset.summary.sequestrationFacilities} CO2 sequestration facilities, ${dataset.summary.estimatedCapacityMtPerYear} Mt CO2/year estimated capacity.
+
+Project types from IEA 2026:
+${list(dataset.technologyMetrics, (item) => `${item.name}: ${item.projectCount} projects, ${item.capacity} Mt CO2/year, ${item.adoption}% capacity share, ${item.operationalShare}% operational share`)}.
+
+Reported CO2 sequestered by facilities:
+${list(dataset.sequesteredTrend, (item) => `${item.year}: ${item.mt} Mt`)}.
+
+Project status counts:
+${list(dataset.statusCounts, (item) => `${item.name}: ${item.value}`)}.
+
+Largest sector capacity groups:
+${list(dataset.sectorCapacity, (item) => `${item.name}: ${item.capacity} Mt CO2/year`)}.
+
+Answer conversationally and cite numbers from this context when relevant. If a question asks for something not covered by the dataset, say what is missing and offer a careful general explanation.
+`.trim();
+
+const fallbackResponse = `I am ready to use the OpenAI API, but the API key is not available to the Vite frontend.
+
+Add \`VITE_OPENAI_API_KEY=...\` to your local \`.env\` file, then restart the dev server. Once that is set, I will answer using the imported CCUS dataset context and the conversation history.`;
+
+function toApiMessages(messages) {
+  const recentMessages = messages.slice(-10).map((message) => ({
+    role: message.role === 'assistant' ? 'assistant' : 'user',
+    content: message.content,
+  }));
+
+  return [
+    {
+      role: 'system',
+      content: compressedDatasetContext,
+    },
+    ...recentMessages,
+  ];
+}
+
+export async function sendChatMessage(messages) {
+  if (isPlaceholderKey) {
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    return {
+      id: crypto.randomUUID(),
+      role: 'assistant',
+      content: fallbackResponse,
+      createdAt: new Date().toISOString(),
+    };
+  }
+
+  const response = await fetch(OPENAI_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: OPENAI_MODEL,
+      messages: toApiMessages(messages),
+      temperature: 0.35,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || `OpenAI API request failed with status ${response.status}`);
+  }
+
+  const payload = await response.json();
+  const content = payload.choices?.[0]?.message?.content?.trim();
 
   return {
     id: crypto.randomUUID(),
     role: 'assistant',
-    content: match?.response ?? fallback,
+    content: content || 'I did not receive a usable response from the OpenAI API.',
     createdAt: new Date().toISOString(),
   };
 }
+
+export const chatConfig = {
+  model: OPENAI_MODEL,
+  hasApiKey: !isPlaceholderKey,
+};
